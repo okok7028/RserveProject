@@ -1,7 +1,5 @@
 package service;
 
-import java.util.ArrayList;
-
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
@@ -60,8 +58,6 @@ public class RService {
 			e.printStackTrace();
 		}catch(REXPMismatchException e){
 			
-		}catch (REngineException e) {
-			e.printStackTrace();
 		}finally{
         c.close();
 		}
