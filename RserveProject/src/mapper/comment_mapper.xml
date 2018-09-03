@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.CommentMapper">
+
+	<insert id="insertComment" parameterType="MainCommentVO">
+		INSERT INTO MAIN_COMMENT
+		VALUES(MAIN_COMMENT_SEQ.NEXTVAL, #{mb_num}, #{writer}, #{comment_pw}, #{content}, #{comment_origin_num}, sysdate, #{c_level}, #{flag_lock})
+		<selectKey order="AFTER" keyProperty="comment_num" resultType="int">
+				SELECT MAIN_COMMENT_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert> 
+	
+	<select id="commentList" resultMap="commentMap">
+		SELECT COMMENT_NUM, MB_NUM, WRITER, COMMENT_PW, CONTENT, COMMENT_ORIGIN_NUM, WRITE_DATE, C_LEVEL, FLAG_LOCK
+		FROM MAIN_COMMENT
+		WHERE MB_NUM=#{mb_num}
+			START WITH C_LEVEL=0
+			CONNECT BY NOCYCLE PRIOR COMMENT_NUM=COMMENT_ORIGIN_NUM
+			ORDER SIBLINGS BY COMMENT_ORIGIN_NUM DESC
+	</select>
+	
+	<select id="selectCommentLevel" resultType="int">
+		SELECT C_LEVEL FROM MAIN_COMMENT WHERE COMMENT_NUM=#{comment_num}
+	</select>
+	
+	<select id="selectMaxNum" resultType="int">
+		SELECT COALESCE(MAX(COMMENT_NUM), 0) FROM MAIN_COMMENT
+	</select>
+	
+	<select id="selectCommentOriginNum" parameterType="int" resultType="int">
+		SELECT COMMENT_ORIGIN_NUM FROM MAIN_COMMENT
+		WHERE COMMENT_NUM=#{comment_num}
+	</select>
+	
+	<resultMap type="MainCommentVO" id="commentMap">
+		<result column="comment_num" property="comment_num"/>
+		<result column="mb_num" property="mb_num"/>
+		<result column="writer" property="writer"/>
+		<result column="comment_pw" property="comment_pw"/>
+		<result column="content" property="content"/>
+		<result column="comment_origin_num" property="comment_origin_num"/>
+		<result column="write_date" property="write_date"/>
+		<result column="c_level" property="c_level"/>
+		<result column="flag_lock" property="flag_lock"/>
+	</resultMap>
+</mapper>

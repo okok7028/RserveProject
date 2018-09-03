@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.RequestBoardMapper">
+
+	<insert id="insertRequesstBoard" parameterType="RequestBoardVO">
+		INSERT INTO REQUEST_BOARD
+		VALUES(REQUEST_BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{content}, sysdate, 
+		#{rb_ref}, #{rb_seq}, #{rb_level}, default, default)
+		<selectKey order="AFTER" keyProperty="rb_num" resultType="int">
+			SELECT REQUEST_BOARD_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<select id="selectRequestMaxNum" resultType="int">
+		SELECT COALESCE(MAX(MB_NUM), 0) FROM REQUEST_BOARD
+	</select>
+	
+	<select id="selectRequestBoardList" resultMap="requestboardMap">
+		SELECT RB_NUM, WRITER, TITLE, CONTENT, TO_CHAR(WRITE_DATE, 'YYYY-MM-DD hh24:mi') as WRITE_DATE,
+		RB_REF, RB_SEQ, RB_LEVEL, READCOUNT, FLAG_RC FROM(
+			SELECT ROWNUM AS RNUM, RB_NUM, WRITER, TITLE, CONTENT, WRITE_DATE, RB_REF, RB_SEQ, RB_LEVEL,
+			READCOUNT, FLAG_RC FROM(
+				SELECT * FROM REQUEST_BOARD ORDER BY RB_REF DESC, RB_SEQ
+			) 
+		) WHERE RNUM&gt;=#{startRow} AND RNUM&lt;=#{endRow}
+	</select>
+
+	<select id="selectRequestBoard" resultMap="requestboardMap">
+		SELECT RB_NUM, WRITER, TITLE, CONTENT, TO_CHAR(WRITE_DATE, 'YYYY-MM-DD hh24:mi') as WRITE_DATE,
+		RB_REF, RB_SEQ, RB_LEVEL, READCOUNT, FLAG_RC FROM REQUEST_BOARD
+		WHERE RB_NUM=#{rb_num}
+	</select>
+
+	<select id="selectRequestBoardCount" resultType="int">
+		SELECT COUNT(*) FROM REQUEST_BOARD
+	</select>
+
+	<update id="updateRequestReply">
+		UPDATE REQUEST_BOARD
+		SET
+			RB_SEQ=RB_SEQ+1
+		WHERE
+			RB_REF=#{rb_ref} AND RB_SEQ&gt;#{rb_seq}	
+	</update>	
+
+	<update id="updateRequestReadCount" parameterType="int">
+		UPDATE REQUEST_BOARD
+		SET
+			READCOUNT=READCOUNT+1
+		WHERE
+			RB_NUM=#{rb_num}	
+	</update>	
+
+	<update id="updateRequestBoard" parameterType="RequestBoardVO">
+		UPDATE REQUEST_BOARD
+		SET
+			TITLE=#{title}, CONTENT=#{content}
+		WHERE
+			RB_NUM=#{rb_num}	
+	</update>	
+
+	<delete id="deleteRequestBoard" parameterType="int">
+		DELETE FROM REQUEST_BOARD WHERE RB_NUM=${rb_num}
+	</delete>
+
+	<update id="updateFlagRC" parameterType="int">
+		UPDATE REQUEST_BOARD
+		SET
+			FLAG_RC=3
+		WHERE
+			RB_NUM=#{rb_num}	
+	</update>
+
+	<resultMap type="RequestBoardVO" id="requestboardMap">
+		<result column="rb_num" property="rb_num"/>
+		<result column="writer" property="writer"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="write_date" property="write_date"/>
+		<result column="rb_ref" property="rb_ref"/>
+		<result column="rb_seq" property="rb_seq"/>
+		<result column="rb_level" property="rb_level"/>
+		<result column="readcount" property="readcount"/>
+		<result column="flag_rc" property="flag_rc"/>
+	</resultMap>	
+</mapper>

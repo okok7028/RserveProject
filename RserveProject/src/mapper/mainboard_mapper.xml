@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.MainBoardMapper">
+	<insert id="insertMainBoard" parameterType="MainBoardVO">
+		INSERT INTO MAIN_BOARD
+		VALUES(MAIN_BOARD_SEQ.NEXTVAL, #{writer}, #{title}, #{content}, sysdate, 
+		#{mb_ref}, #{mb_seq}, #{mb_level}, default, default, default)
+		<selectKey order="AFTER" keyProperty="mb_num" resultType="int">
+			SELECT MAIN_BOARD_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<select id="selectMainMaxNum" resultType="int">
+		SELECT COALESCE(MAX(MB_NUM), 0) FROM MAIN_BOARD
+	</select>
+	
+	<select id="selectMainBoardList" resultMap="mainboardMap">
+		SELECT MB_NUM, WRITER, TITLE, CONTENT, TO_CHAR(WRITE_DATE, 'YYYY-MM-DD hh24:mi') as WRITE_DATE,
+		MB_REF, MB_SEQ, MB_LEVEL, READCOUNT, RECOMMEND, OPPOSITE FROM(
+			SELECT ROWNUM AS RNUM, MB_NUM, WRITER, TITLE, CONTENT, WRITE_DATE, MB_REF, MB_SEQ, MB_LEVEL,
+			READCOUNT, RECOMMEND, OPPOSITE FROM(
+				SELECT * FROM MAIN_BOARD ORDER BY MB_REF DESC, MB_SEQ
+			) 
+		) WHERE RNUM&gt;=#{startRow} AND RNUM&lt;=#{endRow}
+	</select>
+
+	<select id="selectMainBoard" resultMap="mainboardMap">
+		SELECT MB_NUM, WRITER, TITLE, CONTENT, TO_CHAR(WRITE_DATE, 'YYYY-MM-DD hh24:mi') as WRITE_DATE,
+		MB_REF, MB_SEQ, MB_LEVEL, READCOUNT, RECOMMEND, OPPOSITE FROM MAIN_BOARD
+		WHERE MB_NUM=#{mb_num}
+	</select>
+
+	<select id="selectMainBoardCount" resultType="int">
+		SELECT COUNT(*) FROM MAIN_BOARD
+	</select>
+
+	<update id="updateMainReply">
+		UPDATE MAIN_BOARD
+		SET
+			MB_SEQ=MB_SEQ+1
+		WHERE
+			MB_REF=#{mb_ref} AND MB_SEQ&gt;#{mb_seq}	
+	</update>	
+
+	<update id="updateMainReadCount" parameterType="int">
+		UPDATE MAIN_BOARD
+		SET
+			READCOUNT=READCOUNT+1
+		WHERE
+			MB_NUM=#{mb_num}	
+	</update>	
+
+	<update id="updateMainBoard" parameterType="MainBoardVO">
+		UPDATE MAIN_BOARD
+		SET
+			TITLE=#{title}, CONTENT=#{content}
+		WHERE
+			MB_NUM=#{mb_num}	
+	</update>	
+
+	<delete id="deleteMainBoard" parameterType="int">
+		DELETE FROM MAIN_BOARD WHERE MB_NUM=${mb_num}
+	</delete>
+	
+	
+	<select id="selectUpDown" resultMap="mainboardMap">
+		SELECT RECOMMEND, OPPOSTIE FROM MAIN_BOARD
+		WHERE MB_NUM=#{mb_num}
+	</select>
+	
+	<update id="upRecommend" parameterType="int">
+		UPDATE MAIN_BOARD
+		SET
+			RECOMMEND=RECOMMEND+1
+		WHERE
+			MB_NUM=#{mb_num}	
+	</update>	
+	
+	<update id="downOpposite" parameterType="int">
+		UPDATE MAIN_BOARD
+		SET
+			OPPOSITE=OPPOSITE+1
+		WHERE
+			MB_NUM=#{mb_num}	
+	</update>	
+
+	<update id="reRecommend" parameterType="int">
+		UPDATE MAIN_BOARD
+		SET
+			RECOMMEND=RECOMMEND-1
+		WHERE
+			MB_NUM=#{mb_num}	
+	</update>	
+
+	<update id="reOpposite" parameterType="int">
+		UPDATE MAIN_BOARD
+		SET
+			OPPOSITE=OPPOSITE-1
+		WHERE
+			MB_NUM=#{mb_num}
+	</update>	
+
+	<insert id="insertUpdownflag" parameterType="UpdownflagVO">
+		INSERT INTO UPDOWNFLAG
+		VALUES(UPDOWN_SEQ.NEXTVAL, #{flag_up}, #{flag_down}, #{updown_id}, #{mb_num})
+	</insert>
+	
+	<select id="selectUpdownflag" resultMap="updownflagMap">
+		SELECT * FROM UPDOWNFLAG
+		WHERE UPDOWN_ID=#{updown_id} and MB_NUM=#{mb_num}
+	</select>
+	
+	<update id="updateUpdownflag" parameterType="UpdownflagVO">
+		UPDATE UPDOWNFLAG
+		SET
+			FLAG_UP=#{flag_up}, FLAG_DOWN=#{flag_down}
+		WHERE UPDOWN_ID=#{updown_id} AND MB_NUM=#{mb_num}	
+	</update>
+	
+	<delete id="deleteUpdownflag">
+		DELETE FROM UPDOWNFLAG
+	</delete>	
+	
+	<resultMap type="MainBoardVO" id="mainboardMap">
+		<result column="mb_num" property="mb_num"/>
+		<result column="writer" property="writer"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="write_date" property="write_date"/>
+		<result column="mb_ref" property="mb_ref"/>
+		<result column="mb_seq" property="mb_seq"/>
+		<result column="mb_level" property="mb_level"/>
+		<result column="readcount" property="readcount"/>
+		<result column="recommend" property="recommend"/>
+		<result column="opposite" property="opposite"/>
+	</resultMap>	
+	
+	<resultMap type="UpdownflagVO" id="updownflagMap">
+		<result column="updown_num" property="updown_num"/>
+		<result column="flag_up" property="flag_up"/>
+		<result column="flag_down" property="flag_down"/>
+		<result column="updown_id" property="updown_id"/>
+		<result column="mb_num" property="mb_num"/>
+	</resultMap>
+</mapper>
