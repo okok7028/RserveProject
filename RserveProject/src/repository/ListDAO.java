@@ -16,14 +16,24 @@ public class ListDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 	
-	public int insertRequestList(RequestListVO vo){
+	public int insertRequestList(String request_id, String request_code){
 		ListMapper mapper = template.getMapper(ListMapper.class);
-		return mapper.insertRequestList(vo);
+		return mapper.insertRequestList(request_id, request_code);
 	}
 	
-	public List<RequestListVO> selectWaitList(String request_code){
+	public List<RequestListVO> selectWaitListfromCode(String request_code){
 		ListMapper mapper = template.getMapper(ListMapper.class);
-		return mapper.selectWaitList(request_code);
+		return mapper.selectWaitListfromCode(request_code);
+	}
+	
+	public List<RequestListVO> selectWaitListfromId(String request_id){
+		ListMapper mapper = template.getMapper(ListMapper.class);
+		return mapper.selectWaitListfromId(request_id);
+	}
+	
+	public List<RequestListVO> selectCompleteList(String request_id){
+		ListMapper mapper = template.getMapper(ListMapper.class);
+		return mapper.selectCompleteList(request_id);
 	}
 	
 	public int updateDoneList(int request_num){

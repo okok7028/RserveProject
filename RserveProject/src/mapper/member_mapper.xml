@@ -9,13 +9,13 @@
 	<update id="updateMem" parameterType="MemberVO">
 		UPDATE MEMBER
 		SET
-			PASSWORD=#{password}, NAME=#{name}, PHONE=#{phone}, EMAIL=#{email}
+			NAME=#{name}, PHONE=#{phone}, EMAIL=#{email}
 		WHERE
 			ID = #{id}
 	</update>
 	
 	<select id="selectMem" parameterType="String" resultMap="memberMap">
-		SELECT ID, PASSWORD, NAME, NICKNAME, PHONE, EMAIL,
+		SELECT ID, PASSWORD, NAME, PHONE, EMAIL,
 		TO_CHAR(REGIST_DATE, 'YYYY-MM-DD hh24:mi') AS REGIST_DATE, FLAG_ADMIN	
 		FROM MEMBER WHERE ID=#{id}
 	</select>
