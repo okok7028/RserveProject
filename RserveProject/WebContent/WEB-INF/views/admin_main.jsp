@@ -19,11 +19,21 @@
         <div class="col-md-12">
           <h2 class="featurette-heading">예시1 <span class="text-muted">네이버뉴스제목</span></h2>
           <p class="lead">네이버 뉴스 제목으로 워드클라우드 그리기</p>
-          <a href="simpleRequestProc.do?code=wcn">테스트</a>
+          <a href="simpleRequestProc.do?code=wcn">간편분석 워드클라우드</a>
         </div>
       </div>
 
       <hr class="featurette-divider">	
+      
+      <div class="row featurette">
+        <div class="col-md-12">
+          <h2 class="featurette-heading">예시2 <span class="text-muted">학교 위치</span></h2>
+          <p class="lead">학교 위치 지도</p>
+          <a href="simpleRequestProc.do?code=scm">간편 학교 위치</a>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
 </div>      
 </body>
 </html>

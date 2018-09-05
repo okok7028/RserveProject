@@ -7,5 +7,6 @@
 </head>
 <body>
 ${str }
+<a href="adminMain.do">d</a>
 </body>
 </html>

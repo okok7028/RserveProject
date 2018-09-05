@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import mapper.ListMapper;
-import vo.JobListVO;
 import vo.RequestListVO;
 
 @Component
@@ -46,8 +45,4 @@ public class ListDAO {
 		return mapper.selectRquestCheck(request_num);
 	}
 	
-	public int insertJobList(JobListVO vo){
-		ListMapper mapper = template.getMapper(ListMapper.class);
-		return mapper.insertJobList(vo);
-	}
 }

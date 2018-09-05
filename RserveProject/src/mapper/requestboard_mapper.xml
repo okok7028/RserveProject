@@ -12,7 +12,7 @@
 	</insert>
 	
 	<select id="selectRequestMaxNum" resultType="int">
-		SELECT COALESCE(MAX(MB_NUM), 0) FROM REQUEST_BOARD
+		SELECT COALESCE(MAX(RB_NUM), 0) FROM REQUEST_BOARD
 	</select>
 	
 	<select id="selectRequestBoardList" resultMap="requestboardMap">

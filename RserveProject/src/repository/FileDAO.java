@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import mapper.FileMapper;
-import vo.JobResultVO;
 import vo.RequestFileVO;
 import vo.ResultFileVO;
 
@@ -22,9 +21,14 @@ public class FileDAO {
 		return mapper.insertRequestFile(vo);
 	}
 	
-	public List<RequestFileVO> selectRequestFiles(int request_num){
+	public RequestFileVO selectRequestFile(int request_num){
 		FileMapper mapper = template.getMapper(FileMapper.class);
-		return mapper.selectRequestFiles(request_num);
+		return mapper.selectRequestFile(request_num);
+	}
+	
+	public RequestFileVO selectRequestFilebyRb(int rb_num){
+		FileMapper mapper = template.getMapper(FileMapper.class);
+		return mapper.selectRequestFilebyRb(rb_num);
 	}
 	
 	public int insertResultFile(ResultFileVO vo) {
@@ -37,18 +41,14 @@ public class FileDAO {
 		return mapper.selectResultFiles(request_num);
 	}
 	
+	public ResultFileVO selectResultFile(int request_num){
+		FileMapper mapper = template.getMapper(FileMapper.class);
+		return mapper.selectResultFile(request_num);
+	}
+	
 	public int checkDoneRequest(int request_num){
 		FileMapper mapper = template.getMapper(FileMapper.class);
 		return mapper.checkDoneRequest(request_num);
 	}
 	
-	public int insertJobResultFile(JobResultVO vo) {
-		FileMapper mapper = template.getMapper(FileMapper.class);
-		return mapper.insertJobResultFile(vo);
-	}
-	
-	public List<JobResultVO> selectJobResultFiles(int job_num){
-		FileMapper mapper = template.getMapper(FileMapper.class);
-		return mapper.selectJobResultFiles(job_num);
-	}
 }

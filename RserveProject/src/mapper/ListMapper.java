@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import vo.JobListVO;
 import vo.RequestListVO;
 
 public interface ListMapper {
@@ -15,6 +14,4 @@ public interface ListMapper {
 	public List<RequestListVO> selectCompleteList(String request_id);//완료된 리스트
 	public int updateDoneList(int request_num); //완료작업 플래그 업데이트
 	public int selectRquestCheck(int request_num); //작업완료유무 확인
-	//관리자 작업 리스트
-	public int insertJobList(JobListVO vo);
 }

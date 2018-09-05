@@ -43,14 +43,17 @@
                 <c:if test="${code[0] eq 'wcn'}">
                 	워드클라우드
                 </c:if>
+                <c:if test="${code[0] eq 'scm'}">
+                	학교지도
+                </c:if>
                 </td>
-                <td>${code[2] }</td>
+                <td>${code[1] }</td>
                 <td>
                 <c:if test="${rl.request_rc eq 0}">
                 	미완료
                 </c:if>
                 <c:if test="${rl.request_rc eq 3}">
-                	완료
+                	요청번호 ${rl.request_num } 완료
                 </c:if>
                 </td>
 			</tr>
@@ -76,24 +79,27 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
+            <c:if test="${empty FileList }">
+			<tr>
+				<td colspan="4">목록이 없습니다.</td>
+			</tr>
+			</c:if>
+			<c:if test="${not empty FileList }">
+			<c:forEach items="${FileList }" var="fl" varStatus="j">
+			<tr>
+				<td>${j.index+1}</td>
+                <td>${fl.request_num }</td>
+                <c:if test="${fl.request_code eq 'wcn' }">
+                <td><a href="download.do?f=${fl.request_num }&t=x1">${fl.original_name }.csv</a></td>
+                <td><a href="download.do?f=${fl.request_num }&t=i1">${fl.original_name }.png</a></td>
+                </c:if>
+                <c:if test="${fl.request_code eq 'scm' }">
+                <td><a href="download.do?f=${fl.request_num }&t=i1">${fl.original_name }.png</a></td>
+                <td></td>
+                </c:if>
+			</tr>
+			</c:forEach>
+			</c:if>
             </tbody>
           </table>
         </div>

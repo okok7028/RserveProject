@@ -23,8 +23,7 @@
         </div>
         <div class="col-md-5">
           <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="500X500"
-          src="resource/img/ai.png">
-   		  <p align="center"><a class="btn btn-default" href="#" role="button">해당글1 바로가기 &raquo;</a></p>
+          src="resource/img/webtoon.png">
         </div>
       </div>
 
@@ -32,13 +31,12 @@
 
       <div class="row featurette">
         <div class="col-md-7 col-md-push-5">
-          <h2 class="featurette-heading">예시2 <span class="text-muted">See for yourself.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <h2 class="featurette-heading">예시2 <span class="text-muted">초중고 분포 지도</span></h2>
+          <p class="lead">지역에 해당하는 초중고등학교 위치 표시 / 초등학교(파랑) / 중학교(빨강) / 고등학교(초록)</p>
         </div>
         <div class="col-md-5 col-md-pull-7">
           <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image"
-          src="resource/img/web1.png">
-    	 <p align="center"><a class="btn btn-default" href="#" role="button">해당글2  &raquo;</a></p>
+          src="resource/img/seoul.png">
         </div>
       </div>
 
@@ -52,7 +50,6 @@
         <div class="col-md-5">
           <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image"
           src="resource/img/test22.png">
-		  <p align="center"><a class="btn btn-default" href="#" role="button">해당글3  &raquo;</a></p>
         </div>
       </div>
 

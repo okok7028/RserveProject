@@ -28,9 +28,9 @@
               <ul class="nav navbar-nav">
                 <li><a href="main.do">Home</a></li>
                 <li><a href="#">메뉴1</a></li>
-                <li><a href="#">메뉴2</a></li>
-                <c:if test="${not empty sessionScope.loginId}">
+                <li><a href="requestBoardList.do">분석요청</a></li>
                 <li><a href="simpleForm.do">간편분석</a></li>
+                <c:if test="${not empty sessionScope.loginId}">
                 <li><a href="myRequest.do">나의요청</a></li>
                 </c:if>
               </ul>

@@ -82,14 +82,35 @@ $(function() {
       <hr class="featurette-divider">
 
       <div class="row featurette">
-        <div class="col-md-7 col-md-push-5">
-          <h2 class="featurette-heading">예시2 <span class="text-muted">See for yourself.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+        <div class="col-md-8 col-md-push-3">
+          <h2 class="featurette-heading">위치지도 <span class="text-muted">학교 위치 지도</span></h2>
+        <form class="form-horizontal" action="simpleRequestWcnews.do" method="post" id="schoolmap">
+        	<input type="hidden" name="codeprefix" value="scm">
+        	<input type="hidden" name="id" value="${sessionScope.loginId }">
+			<div class="form-group">
+				<label for="inputKeyword" class="col-sm-3 control-label">지역명</label>
+			    <div class="col-sm-6">
+			      <input type="text" class="form-control" id="inputKeyword" placeholder="지역명"
+			      name="keyword">
+			    </div>
+			</div>
+			<div class="form-group">
+				<label for="inputFilename" class="col-sm-3 control-label">파일이름</label>
+			    <div class="col-sm-6">
+			      <input type="text" class="form-control" id="inputFilename" placeholder="filename"
+			      name="filename">
+			    </div>
+			</div>
+			<div class="form-group">
+			    <div class="col-sm-offset-3 col-sm-8">
+			      <button type="submit" class="btn btn-default">요청</button>
+			    </div>  
+			</div>
+		</form>
         </div>
-        <div class="col-md-5 col-md-pull-7">
+        <div class="col-md-3 col-md-pull-8">
           <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image"
           src="resource/img/web1.png">
-    	 <p align="center"><a class="btn btn-default" href="#" role="button">해당글2  &raquo;</a></p>
         </div>
       </div>
 

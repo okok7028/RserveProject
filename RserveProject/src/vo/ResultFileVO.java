@@ -6,14 +6,25 @@ public class ResultFileVO {
 	private String original_name;
 	private String saved_path;
 	private int request_num;
+	private String request_code;
 	
 	public ResultFileVO() { }
-	
-	public ResultFileVO(int file_num, String original_name, String saved_path, int request_num) {
+
+	public ResultFileVO(int file_num, String original_name, String saved_path, int request_num, String request_code) {
+		super();
 		this.file_num = file_num;
 		this.original_name = original_name;
 		this.saved_path = saved_path;
 		this.request_num = request_num;
+		this.request_code = request_code;
+	}
+
+	public String getRequest_code() {
+		return request_code;
+	}
+
+	public void setRequest_code(String request_code) {
+		this.request_code = request_code;
 	}
 
 	public int getFile_num() {

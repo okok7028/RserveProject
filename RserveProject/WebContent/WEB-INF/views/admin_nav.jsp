@@ -27,7 +27,7 @@
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
                 <li><a href="adminMain.do">Home</a></li>
-                <li><a href="#">메뉴1</a></li>
+                <li><a href="adminMemberList.do">회원관리</a></li>
                 <li><a href="#">메뉴2</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
