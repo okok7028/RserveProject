@@ -147,14 +147,14 @@ public class BoardController {
 	@RequestMapping(value="/readRB.do", method=RequestMethod.GET)
 	@ResponseBody
 	public void requestread(@RequestParam("n")int rb_num, 
-			@RequestParam(value="p")int currentPage, HttpServletResponse response) {
+			@RequestParam(value="p")int currentPage, @RequestParam(value="i")int i, HttpServletResponse response) {
 		
 		RequestBoardVO vo = service.readRB(rb_num);
 		int insertedNum = vo.getRb_num();
 		
 		try {
 			response.sendRedirect("readRBResult.do?n="+insertedNum+
-					"&p="+currentPage);
+					"&p="+currentPage+"&i="+i);
 		} catch (IOException e) {
 			System.out.println("글읽기 실패");
 			e.printStackTrace();
@@ -162,16 +162,17 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/readRBResult.do")
-	public ModelAndView requestreadResult(@RequestParam("n")int rb_num, @RequestParam("p")int currentPage) {
+	public ModelAndView requestreadResult(@RequestParam("n")int rb_num, @RequestParam("p")int currentPage, @RequestParam(value="i")int i) {
 		ModelAndView mv = new ModelAndView("read_rb");
 		mv.addObject("board", service.readRBWithoutCount(rb_num));
 		mv.addObject("p", currentPage);
+		mv.addObject("i", i);
 		return mv;
 	}
 	
 	@RequestMapping(value="/readMB.do", method=RequestMethod.GET)
 	@ResponseBody
-	public void mainread(@RequestParam("n")int mb_num, 
+	public void mainread(@RequestParam("n")int mb_num, @RequestParam(value="i")int i,
 			@RequestParam(value="p")int currentPage, HttpServletResponse response) {
 		
 		MainBoardVO vo = service.readMB(mb_num);
@@ -179,7 +180,7 @@ public class BoardController {
 		
 		try {
 			response.sendRedirect("readMBResult.do?n="+insertedNum+
-					"&p="+currentPage);
+					"&p="+currentPage+"&i="+i);
 		} catch (IOException e) {
 			System.out.println("글읽기 실패");
 			e.printStackTrace();
@@ -187,10 +188,11 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/readMBResult.do")
-	public ModelAndView mainreadResult(@RequestParam("n")int mb_num, @RequestParam("p")int currentPage) {
+	public ModelAndView mainreadResult(@RequestParam("n")int mb_num, @RequestParam("p")int currentPage, @RequestParam(value="i")int i) {
 		ModelAndView mv = new ModelAndView("read_mb");
 		mv.addObject("board", service.readMBWithoutCount(mb_num));
 		mv.addObject("p", currentPage);
+		mv.addObject("i", i);
 		return mv;
 	}
 	

@@ -14,15 +14,15 @@
 <div class="container marketing">
 
       <hr class="featurette-divider">
-
+      
       <div class="row featurette">
           <div class="col-md-12">
           <div class="row">
 		  <form class="form-horizontal" action="writeMB.do" method="post">
 			<input type="hidden" name="num" value="${num }">
-			<input type="hidden" name="rb_ref" value="${rb_ref }">
-			<input type="hidden" name="rb_seq" value="${rb_seq }">
-			<input type="hidden" name="rb_level" value="${rb_level }">
+			<input type="hidden" name="mb_ref" value="${mb_ref }">
+			<input type="hidden" name="mb_seq" value="${mb_seq }">
+			<input type="hidden" name="mb_level" value="${mb_level }">
 			<input type="hidden" name="writer" value="${writer }">
 			<div class="form-group">
 				<label for="title" class="col-sm-3 control-label">제목</label>

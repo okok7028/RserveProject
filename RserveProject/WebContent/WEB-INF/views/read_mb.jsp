@@ -38,7 +38,7 @@ function getList(mb_num) {
 												table+= "<input type='button' onclick='creply(this)' value='댓글' id='cId_"+$(this).find("comment_num").text()+ "' class='cName_"+ $(this).find("comment_num").text()+ "' /></td>";
 											}else{
 												table += "<td width="+'20%'+" align="+'left'+"></td>";
-												table += "<td width="+'50%'+" align="+'left'+">비밀</td>";
+												table += "<td width="+'50%'+" align="+'left'+">비밀댓글입니다.</td>";
 												table += "<td width="+'20%'+" align="+'left'+"></td>";
 												table+="<td>";
 											}
@@ -61,14 +61,6 @@ function getList(mb_num) {
 
 }	// getList()끝
 
-function secret() {
-	if($("#lock1").is(":checked")){
-		$("#lock").val('y');
-	}else{
-		$("#lock").val('n');
-	}
-}
-
 function creply(ccc) {
 	var bb = $(ccc).attr("class");
 	var cc = bb.split("cName_");
@@ -83,8 +75,8 @@ function creply(ccc) {
 	reply += '<div class="form-group">';
 	reply += '	<label for="pass1">비밀번호</label>';
 	reply += '	<input type="password" name="comment_pw" size="7" class="form-control" id="pass1">';
-	reply += '<div class="checkbox"> <label> <input type="checkbox" onclick="secret()"> 비밀댓글 </label>';
-	reply += '<input type="hidden" name="flag_lock" id="lock"></div>';
+	reply += '<div class="checkbox"> <label> <input type="checkbox" id="lock2"> 비밀댓글 </label>';
+	reply += '<input type="hidden" name="flag_lock" id="lock3"></div>';
 	reply += '	<button type="button" class="btn btn-default" id="submit" onclick="submitreply()">작성</button>';
 	reply += '</form>';
 	$("#sendReply").remove();
@@ -161,6 +153,22 @@ function submitreply() {
 $(function() {
 	var mb_num = $("input[name=mb_num]").val();
 	getList(mb_num);
+	
+	$("#lock1").change(function() {	
+			if($(this).is(":checked")){
+				$("#lock").val('y');
+			}else{
+				$("#lock").val('n');
+			}
+	});
+
+	$(document).on("click", "#lock2", function() {	
+			if($("#lock2").is(":checked")){
+				$("#lock3").val('y');
+			}else{
+				$("#lock3").val('n');
+			}
+	});
 	
 	$("#submit").click(function() {
         $.ajax({
@@ -239,7 +247,7 @@ $(function() {
             <tbody>
 			  <tr>
 				<td>글번호</td>
-				<td>${board.mb_num+1 }</td>
+				<td>${i }</td>
 				<td>작성자</td>
 				<td>${board.writer }</td>
 				<td>작성일시</td>
@@ -284,7 +292,7 @@ $(function() {
 				</div>
 				<div class="checkbox">
 			    	<label>
-			     	 <input type="checkbox" onclick="secret()" id="lock1"> 비밀댓글
+			     	 <input type="checkbox" id="lock1"> 비밀댓글
 			    	</label>
 			    	<input type="hidden" name="flag_lock" id="lock">
 			  	</div>

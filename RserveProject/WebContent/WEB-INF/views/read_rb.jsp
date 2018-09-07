@@ -39,7 +39,7 @@
             <tbody>
 			  <tr>
 				<td>글번호</td>
-				<td>${board.rb_num+1 }</td>
+				<td>${i }</td>
 				<td>작성자</td>
 				<td>${board.writer }</td>
 				<td>작성일시</td>

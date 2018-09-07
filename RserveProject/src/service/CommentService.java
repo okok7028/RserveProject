@@ -45,7 +45,6 @@ public class CommentService {
 		vo.setC_level(c_level);
 		}
 		dao.insertComment(vo);
-		System.out.println("success comment dao proc in commentService");
 		Map<String, Object> map = new HashMap<>();
 		map.put("result", 1);
 

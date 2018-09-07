@@ -125,6 +125,7 @@ public class BoardService {
 		}
 		
 		int mb_ref = mb.getMb_ref();
+		System.out.println(mb_ref);
 		int mb_seq = mb.getMb_seq();
 		int mb_level = mb.getMb_level();
 		if(num != 0) { // 답글

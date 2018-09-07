@@ -47,7 +47,7 @@
 						<img src="resource/img/level.gif" width="${wid }">
 						<img src="resource/img/re.gif">
 					</c:if>
-					<a href="readMB.do?n=${b.mb_num }&p=${boardPage.currentPage}">${b.title }</a>
+					<a href="readMB.do?n=${b.mb_num }&p=${boardPage.currentPage}&i=${number-i.index }">${b.title }</a>
 					<c:if test="${b.readcount ge 20 }">
 					<img alt="" src="resource/img/hot.gif"  border="0">
 					</c:if>
