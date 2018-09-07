@@ -9,9 +9,9 @@
 		</selectKey>
 	</insert>
 	
-	<select id="selectWaitListfromCode" parameterType="String" resultMap="requestlistMap">
+	<select id="selectWaitListfromCode" resultMap="requestlistMap">
 		SELECT * FROM REQUEST_LIST
-		WHERE REQUEST_CODE LIKE #{request_code} AND REQUEST_RC=0 AND ROWNUM&lt;=5
+		WHERE REQUEST_CODE LIKE #{request_code} AND REQUEST_RC=0 AND ROWNUM&lt;=#{num}
 	</select>
 	
 	<select id="selectWaitListfromId" parameterType="String" resultMap="requestlistMap">

@@ -27,7 +27,7 @@
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
                 <li><a href="main.do">Home</a></li>
-                <li><a href="#">메뉴1</a></li>
+                <li><a href="mainBoardList.do">자유게시판</a></li>
                 <li><a href="requestBoardList.do">분석요청</a></li>
                 <li><a href="simpleForm.do">간편분석</a></li>
                 <c:if test="${not empty sessionScope.loginId}">

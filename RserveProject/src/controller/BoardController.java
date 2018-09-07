@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import service.BoardService;
 import service.FileService;
+import vo.MainBoardVO;
 import vo.RequestBoardVO;
 
 @Controller
@@ -29,15 +30,23 @@ public class BoardController {
 	private FileService fservice;
 	
 	@RequestMapping("/requestBoardList.do")
-	public ModelAndView boardList(@RequestParam(value="p", defaultValue="1")int page) {
+	public ModelAndView requestboardList(@RequestParam(value="p", defaultValue="1")int page) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("boardPage", service.makeRequestBoardPage(page));
 		mv.setViewName("request_board_list");
 		return mv;
 	}
 	
+	@RequestMapping("/mainBoardList.do")
+	public ModelAndView mainboardList(@RequestParam(value="p", defaultValue="1")int page) {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("boardPage", service.makeMainBoardPage(page));
+		mv.setViewName("main_board_list");
+		return mv;
+	}
+	
 	@RequestMapping("/requestWriteForm.do")
-	public ModelAndView writerForm(@RequestParam(value="n", defaultValue="0")int rb_num, HttpSession session) {
+	public ModelAndView requestwriterForm(@RequestParam(value="n", defaultValue="0")int rb_num, HttpSession session) {
 		ModelAndView mv = new ModelAndView("request_write_form");
 
 		mv.addObject("writer", session.getAttribute("loginId"));
@@ -57,9 +66,30 @@ public class BoardController {
 		return mv;
 	}
 	
+	@RequestMapping("/mainWriteForm.do")
+	public ModelAndView mainwriterForm(@RequestParam(value="n", defaultValue="0")int mb_num, HttpSession session) {
+		ModelAndView mv = new ModelAndView("main_write_form");
+
+		mv.addObject("writer", session.getAttribute("loginId"));
+
+		if((Integer)mb_num==0) {
+		mv.addObject("num", 0);
+		mv.addObject("mb_ref", 1);
+		mv.addObject("mb_seq", 0);
+		mv.addObject("mb_level", 0);
+		}else {
+			MainBoardVO vo = service.readMBWithoutCount(mb_num);
+			mv.addObject("num", mb_num);
+			mv.addObject("mb_ref", vo.getMb_ref());
+			mv.addObject("mb_seq", vo.getMb_seq());
+			mv.addObject("mb_level", vo.getMb_level());
+		}
+		return mv;
+	}
+	
 	@RequestMapping(value="/writeRB.do", method=RequestMethod.POST)
 	@ResponseBody
-	public void write(HttpServletResponse response, int num, HttpServletRequest request,
+	public void requestwrite(HttpServletResponse response, int num, HttpServletRequest request,
 			@RequestParam("file") MultipartFile[] files, RequestBoardVO vo) {
 
 		int rb_num = service.writeRB(vo, num);
@@ -77,11 +107,85 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/writeRBResult.do")
-	public ModelAndView writeResult(int rb_num) {
+	public ModelAndView requestwriteResult(int rb_num) {
 
 		ModelAndView mv = new ModelAndView("write_rb_result");
 		mv.addObject("insertedRB", service.readRBWithoutCount(rb_num));
 		mv.addObject("file", fservice.getRBfile(rb_num));
 		return mv;
 	}
+	
+	@RequestMapping(value="/writeMB.do", method=RequestMethod.POST)
+	@ResponseBody
+	public void mainwrite(HttpServletResponse response, int num, HttpServletRequest request,
+			MainBoardVO vo) {
+
+		int mb_num = service.writeMB(vo, num);
+		
+		try {
+			response.sendRedirect("writeMBResult.do?mb_num=" + mb_num);
+		} catch (IOException e) {
+			System.out.println("글쓰기 실패");
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/writeMBResult.do")
+	public ModelAndView mainwriteResult(int mb_num) {
+
+		ModelAndView mv = new ModelAndView("write_mb_result");
+		mv.addObject("insertedMB", service.readMBWithoutCount(mb_num));
+		return mv;
+	}
+	
+	@RequestMapping(value="/readRB.do", method=RequestMethod.GET)
+	@ResponseBody
+	public void requestread(@RequestParam("n")int rb_num, 
+			@RequestParam(value="p")int currentPage, HttpServletResponse response) {
+		
+		RequestBoardVO vo = service.readRB(rb_num);
+		int insertedNum = vo.getRb_num();
+		
+		try {
+			response.sendRedirect("readRBResult.do?n="+insertedNum+
+					"&p="+currentPage);
+		} catch (IOException e) {
+			System.out.println("글읽기 실패");
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/readRBResult.do")
+	public ModelAndView requestreadResult(@RequestParam("n")int rb_num, @RequestParam("p")int currentPage) {
+		ModelAndView mv = new ModelAndView("read_rb");
+		mv.addObject("board", service.readRBWithoutCount(rb_num));
+		mv.addObject("p", currentPage);
+		return mv;
+	}
+	
+	@RequestMapping(value="/readMB.do", method=RequestMethod.GET)
+	@ResponseBody
+	public void mainread(@RequestParam("n")int mb_num, 
+			@RequestParam(value="p")int currentPage, HttpServletResponse response) {
+		
+		MainBoardVO vo = service.readMB(mb_num);
+		int insertedNum = vo.getMb_num();
+		
+		try {
+			response.sendRedirect("readMBResult.do?n="+insertedNum+
+					"&p="+currentPage);
+		} catch (IOException e) {
+			System.out.println("글읽기 실패");
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/readMBResult.do")
+	public ModelAndView mainreadResult(@RequestParam("n")int mb_num, @RequestParam("p")int currentPage) {
+		ModelAndView mv = new ModelAndView("read_mb");
+		mv.addObject("board", service.readMBWithoutCount(mb_num));
+		mv.addObject("p", currentPage);
+		return mv;
+	}
+	
 }

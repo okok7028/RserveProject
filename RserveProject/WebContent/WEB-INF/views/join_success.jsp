@@ -9,11 +9,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
 <body>
- <div class="container">
-  <div class="row">
-  	<h1>회원가입성공</h1><br>
-  	<a href="${pageContext.request.contextPath}">메인</a>
-  </div>
-</div>	
+<script type="text/javascript">
+	alert("회원가입성공");
+	location.href='main.do';
+</script>	
 </body>
 </html>

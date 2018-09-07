@@ -71,27 +71,27 @@ public class MainBoardVO {
 		this.write_date = write_date;
 	}
 
-	public int getmb_ref() {
+	public int getMb_ref() {
 		return mb_ref;
 	}
 
-	public void setmb_ref(int mb_ref) {
+	public void setMb_ref(int mb_ref) {
 		this.mb_ref = mb_ref;
 	}
 
-	public int getmb_seq() {
+	public int getMb_seq() {
 		return mb_seq;
 	}
 
-	public void setmb_seq(int mb_seq) {
+	public void setMb_seq(int mb_seq) {
 		this.mb_seq = mb_seq;
 	}
 
-	public int getmb_level() {
+	public int getMb_level() {
 		return mb_level;
 	}
 
-	public void setmb_level(int mb_level) {
+	public void setMb_level(int mb_level) {
 		this.mb_level = mb_level;
 	}
 
@@ -118,6 +118,8 @@ public class MainBoardVO {
 	public void setOpposite(int opposite) {
 		this.opposite = opposite;
 	}
+
+	
 	
 	
 }

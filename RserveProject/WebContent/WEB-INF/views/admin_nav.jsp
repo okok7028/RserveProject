@@ -5,7 +5,7 @@
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<title></title>
+<title>관리자 메인</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
@@ -28,7 +28,7 @@
               <ul class="nav navbar-nav">
                 <li><a href="adminMain.do">Home</a></li>
                 <li><a href="adminMemberList.do">회원관리</a></li>
-                <li><a href="#">메뉴2</a></li>
+                <li><a href="adminRequest.do">요청처리</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
               	<li><a href="#">${sessionScope.loginId}</a></li>

@@ -16,16 +16,39 @@ var wordcloudCheck = {
 $(function() {
 	$("form[id='wordcloud']").submit(function() {
 		
-		if($("input[name='keyword']").val() == ""){
+		if($("input[id='inputKeyword1']").val() == ""){
 			alert("검색어 입력하세요.");
-			$("input[name='keyword']").focus();
+			$("input[id='inputKeyword1']").focus();
 			return false; 
 		}else{
 			wordcloudCheck["keywordCheck"]=true;
 		}
-		if($("input[name='filename']").val()==""){
+		if($("input[id='inputFilename1']").val()==""){
 			alert("파일이름 입력");
-			$("input[name='filename']").focus();
+			$("input[id='inputFilename1']").focus();
+			return false;
+		}else{
+			wordcloudCheck["filenameCheck"]=true;
+		}
+		if(wordcloudCheck["keywordCheck"]&&wordcloudCheck["filenameCheck"]){
+			return true;
+		}else{
+			alert("작성내용을 다시 확인해주세요.");
+		}
+	})
+	
+	$("form[id='schoolmap']").submit(function() {
+		
+		if($("input[id='inputKeyword2']").val() == ""){
+			alert("검색어 입력하세요.");
+			$("input[id='inputKeyword2']").focus();
+			return false; 
+		}else{
+			wordcloudCheck["keywordCheck"]=true;
+		}
+		if($("input[id='inputFilename2']").val()==""){
+			alert("파일이름 입력");
+			$("input[id='inputFilename2']").focus();
 			return false;
 		}else{
 			wordcloudCheck["filenameCheck"]=true;
@@ -53,16 +76,16 @@ $(function() {
         	<input type="hidden" name="codeprefix" value="wcn">
         	<input type="hidden" name="id" value="${sessionScope.loginId }">
 			<div class="form-group">
-				<label for="inputKeyword" class="col-sm-3 control-label">검색어</label>
+				<label for="inputKeyword1" class="col-sm-3 control-label">검색어</label>
 			    <div class="col-sm-6">
-			      <input type="text" class="form-control" id="inputKeyword" placeholder="news"
+			      <input type="text" class="form-control" id="inputKeyword1" placeholder="news"
 			      name="keyword">
 			    </div>
 			</div>
 			<div class="form-group">
-				<label for="inputFilename" class="col-sm-3 control-label">파일이름</label>
+				<label for="inputFilename1" class="col-sm-3 control-label">파일이름</label>
 			    <div class="col-sm-6">
-			      <input type="text" class="form-control" id="inputFilename" placeholder="filename"
+			      <input type="text" class="form-control" id="inputFilename1" placeholder="filename"
 			      name="filename">
 			    </div>
 			</div>
@@ -88,16 +111,16 @@ $(function() {
         	<input type="hidden" name="codeprefix" value="scm">
         	<input type="hidden" name="id" value="${sessionScope.loginId }">
 			<div class="form-group">
-				<label for="inputKeyword" class="col-sm-3 control-label">지역명</label>
+				<label for="inputKeyword2" class="col-sm-3 control-label">지역명</label>
 			    <div class="col-sm-6">
-			      <input type="text" class="form-control" id="inputKeyword" placeholder="지역명"
+			      <input type="text" class="form-control" id="inputKeyword2" placeholder="지역명"
 			      name="keyword">
 			    </div>
 			</div>
 			<div class="form-group">
-				<label for="inputFilename" class="col-sm-3 control-label">파일이름</label>
+				<label for="inputFilename2" class="col-sm-3 control-label">파일이름</label>
 			    <div class="col-sm-6">
-			      <input type="text" class="form-control" id="inputFilename" placeholder="filename"
+			      <input type="text" class="form-control" id="inputFilename2" placeholder="filename"
 			      name="filename">
 			    </div>
 			</div>
@@ -110,26 +133,11 @@ $(function() {
         </div>
         <div class="col-md-3 col-md-pull-8">
           <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image"
-          src="resource/img/web1.png">
+          src="resource/img/seoul.png">
         </div>
       </div>
 
       <hr class="featurette-divider">
-
-      <div class="row featurette">
-        <div class="col-md-7">
-          <h2 class="featurette-heading">예시3 <span class="text-muted">Checkmate.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-        </div>
-        <div class="col-md-5">
-          <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image"
-          src="resource/img/test22.png">
-		  <p align="center"><a class="btn btn-default" href="#" role="button">해당글3  &raquo;</a></p>
-        </div>
-      </div>
-
-      <hr class="featurette-divider">
-
 
     </div>
     

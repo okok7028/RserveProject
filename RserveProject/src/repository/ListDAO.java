@@ -20,9 +20,9 @@ public class ListDAO {
 		return mapper.insertRequestList(request_id, request_code);
 	}
 	
-	public List<RequestListVO> selectWaitListfromCode(String request_code){
+	public List<RequestListVO> selectWaitListfromCode(String request_code, int num){
 		ListMapper mapper = template.getMapper(ListMapper.class);
-		return mapper.selectWaitListfromCode(request_code);
+		return mapper.selectWaitListfromCode(request_code, num);
 	}
 	
 	public List<RequestListVO> selectWaitListfromId(String request_id){

@@ -45,7 +45,7 @@ public class RService {
 	}
 	
 	public String wordcloudNews(String request_code, HttpServletRequest request) {
-		List<RequestListVO> list = ldao.selectWaitListfromCode(request_code);
+		List<RequestListVO> list = ldao.selectWaitListfromCode(request_code, 5);
 		String dirPath = request.getServletContext().getRealPath("/resource/img/");
 		String work="";
 		int requestNum;
@@ -118,12 +118,12 @@ public class RService {
 		}//end for
 		return "success";
 		}else{
-			return "empty";
+			return "empty1";
 		}
 	}
 	
 	public String schoolMap(String request_code, HttpServletRequest request) {
-		List<RequestListVO> list = ldao.selectWaitListfromCode(request_code);
+		List<RequestListVO> list = ldao.selectWaitListfromCode(request_code, 20);
 		String dirPath = request.getServletContext().getRealPath("/resource/img/");
 		String work="";
 		int requestNum;
@@ -185,7 +185,7 @@ public class RService {
 		}//end for
 		return "success";
 		}else{
-			return "empty";
+			return "empty1";
 		}
 	}
 	
