@@ -7,12 +7,11 @@
 <title></title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<script src="resource/holder.js"></script>
 </head>
 <body>
-	<jsp:include page="nav.jsp"/>
-    
-    <div class="container marketing">
+	<jsp:include page="admin_nav.jsp"/>
+	
+<div class="container marketing">
 
       <hr class="featurette-divider">
 
@@ -70,7 +69,5 @@
 
 
     </div>
-    
-    <jsp:include page="foot.jsp"/>
 </body>
 </html>

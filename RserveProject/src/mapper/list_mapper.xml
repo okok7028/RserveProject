@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.ListMapper">
+	<insert id="insertRequestList">
+		INSERT INTO REQUEST_LIST
+		VALUES(REQUEST_LIST_SEQ.NEXTVAL, #{request_id}, #{request_code}, default)
+		<selectKey order="AFTER" keyProperty="request_num" resultType="int">
+			SELECT REQUEST_LIST_SEQ.CURRVAL FROM DUAL	
+		</selectKey>
+	</insert>
+	
+	<select id="selectWaitListfromCode" resultMap="requestlistMap">
+		SELECT * FROM REQUEST_LIST
+		WHERE REQUEST_CODE LIKE #{request_code} AND REQUEST_RC=0 AND ROWNUM&lt;=#{num}
+	</select>
+	
+	<select id="selectWaitListfromId" parameterType="String" resultMap="requestlistMap">
+		SELECT * FROM REQUEST_LIST
+		WHERE REQUEST_ID=#{request_id}
+	</select>
+	
+	<select id="selectCompleteList" parameterType="String" resultMap="requestlistMap">
+		SELECT * FROM REQUEST_LIST
+		WHERE REQUEST_ID=#{request_id} AND REQUEST_RC=3
+	</select>
+	
+	<update id="updateDoneList" parameterType="int">
+		UPDATE REQUEST_LIST
+		SET
+			REQUEST_RC=3
+		WHERE
+			REQUEST_NUM=#{request_num}	
+	</update>
+	
+	<select id="selectRquestCheck" parameterType="int" resultType="int">
+		SELECT REQUEST_RC FROM REQUEST_LIST WHERE REQUEST_NUM=#{request_num}
+	</select>
+	
+	<resultMap type="RequestListVO" id="requestlistMap">
+		<result column="request_num" property="request_num"/>
+		<result column="request_id" property="request_id"/>
+		<result column="request_code" property="request_code"/>
+		<result column="request_rc" property="request_rc"/>
+	</resultMap>
+	
+</mapper>

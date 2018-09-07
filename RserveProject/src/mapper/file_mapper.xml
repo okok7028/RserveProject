@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.FileMapper">
+	<insert id="insertRequestFile" parameterType="RequestFileVO">
+		INSERT INTO REQUEST_FILE
+		VALUES(REQUEST_FILE_SEQ.NEXTVAL, #{original_name}, #{saved_path}, #{request_num}, #{rb_num})
+		<selectKey order="AFTER" keyProperty="file_num" resultType="int">
+			SELECT REQUEST_FILE_SEQ.CURRVAL FROM DUAL	
+		</selectKey>
+	</insert>
+	
+	<select id="selectRequestFile" resultMap="requestfileMap">
+		SELECT * FROM REQUEST_FILE
+		WHERE REQEUST_NUM=#{request_num}
+	</select>
+	
+	<select id="selectRequestFilebyRb" resultMap="requestfileMap">
+		SELECT * FROM REQUEST_FILE
+		WHERE RB_NUM=#{rb_num}
+	</select>
+	
+	<insert id="insertResultFile" parameterType="ResultFileVO">
+		INSERT INTO RESULT_FILE
+		VALUES(RESULT_FILE_SEQ.NEXTVAL, #{original_name}, #{saved_path}, #{request_num}, #{request_code})
+		<selectKey order="AFTER" keyProperty="file_num" resultType="int">
+			SELECT RESULT_FILE_SEQ.CURRVAL FROM DUAL	
+		</selectKey>
+	</insert>
+	
+	<select id="selectResultFiles" resultMap="resultfileMap">
+		SELECT * FROM RESULT_FILE
+		WHERE REQEUST_NUM=#{request_num}
+	</select>
+	
+	<select id="selectResultFile" resultMap="resultfileMap">
+		SELECT * FROM RESULT_FILE
+		WHERE REQUEST_NUM=#{request_num}
+	</select>
+	
+	<select id="checkDoneRequest" parameterType="int" resultType="int">
+		SELECT FILE_NUM FROM RESULT_FILE WHERE REQUEST_NUM=#{request_num}
+	</select>
+	
+	<resultMap type="RequestFileVO" id="requestfileMap">
+		<result column="file_num" property="file_num" />
+		<result column="original_name" property="original_name" />
+		<result column="saved_path" property="saved_path" />
+		<result column="request_num" property="request_num" />
+		<result column="rb_num" property="rb_num" />
+	</resultMap>
+	<resultMap type="ResultFileVO" id="resultfileMap">
+		<result column="file_num" property="file_num" />
+		<result column="original_name" property="original_name" />
+		<result column="saved_path" property="saved_path" />
+		<result column="request_num" property="request_num" />
+		<result column="request_code" property="request_code" />
+	</resultMap>
+</mapper>

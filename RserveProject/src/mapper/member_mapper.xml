@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.MemberMapper">
+	<insert id="insertMem" parameterType="MemberVO">
+		INSERT INTO MEMBER
+		VALUES(#{id}, #{password}, #{name}, #{phone}, #{email}, sysdate, default)
+	</insert>
+	
+	<update id="updateMem" parameterType="MemberVO">
+		UPDATE MEMBER
+		SET
+			NAME=#{name}, PHONE=#{phone}, EMAIL=#{email}
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<select id="selectMem" parameterType="String" resultMap="memberMap">
+		SELECT ID, PASSWORD, NAME, PHONE, EMAIL,
+		TO_CHAR(REGIST_DATE, 'YYYY-MM-DD hh24:mi') AS REGIST_DATE, FLAG_ADMIN	
+		FROM MEMBER WHERE ID=#{id}
+	</select>
+	
+	<select id="getPassbyId" parameterType="String" resultType="String">
+		SELECT PASSWORD FROM MEMBER WHERE ID=#{id}
+	</select>
+	
+	<update id="updatePassword">
+		UPDATE MEMBER
+		SET 
+			PASSWORD=#{password}
+		WHERE
+			ID=#{id}
+	</update>
+	
+	<delete id="deleteMem" parameterType="String">
+		DELETE FROM MEMBER
+		WHERE ID=#{id}
+	</delete>
+	
+	<select id="getFlag" parameterType="String" resultType="String">
+		SELECT FLAG_ADMIN FROM MEMBER WHERE ID=#{id}
+	</select>
+	
+	<resultMap type="MemberVO" id="memberMap">
+		<result column="ID" property="id"/>
+		<result column="PASSWORD" property="password"/>
+		<result column="NAME" property="name"/>
+		<result column="PHONE" property="phone"/>
+		<result column="EMAIL" property="email"/>
+		<result column="REGIST_DATE" property="regist_date"/>
+		<result column="FLAG_ADMIN" property="flag_admin"/>
+	</resultMap>
+</mapper>

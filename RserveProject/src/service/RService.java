@@ -1,24 +1,73 @@
 package service;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import repository.FileDAO;
+import repository.ListDAO;
+import vo.RequestFileVO;
+import vo.RequestListVO;
+import vo.ResultFileVO;
 
 @Component
 public class RService {
 
+	@Autowired
+	private ListDAO ldao;
+	@Autowired
+	private FileDAO fdao;
+	
 	private REXP x = null;
 	private RConnection c =null;
 	
-	public String testR() {
-		String retStr="done";
-		String keyword="축제";
-		String fname="test22";
+	public boolean insertRequestList(String request_id, String request_code){
+		if(ldao.insertRequestList(request_id, request_code)>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	// 유저 간편요청 전체 리스트
+	public List<RequestListVO> getSimpleRequestList(String request_id){
+		return ldao.selectWaitListfromId(request_id);
+	}
+	
+	public String wordcloudNews(String request_code, HttpServletRequest request) {
+		List<RequestListVO> list = ldao.selectWaitListfromCode(request_code, 5);
+		String dirPath = request.getServletContext().getRealPath("/resource/img/");
+		String work="";
+		int requestNum;
+		String keyword="";
+		String fname="";
+		String code="";
+		String originalName="";
+		ResultFileVO vo=new ResultFileVO();
+		if(list !=null){
+		for(int j=0; j<list.size(); j++){
+			code=list.get(j).getRequest_code();
+			StringTokenizer stz = new StringTokenizer(code, "_");
+			work=stz.nextToken();
+			keyword=stz.nextToken();
+			originalName=stz.nextToken();
+			fname = dirPath+new Random().nextInt(1000000) + "";
+			requestNum=list.get(j).getRequest_num();
+			System.out.println(keyword+"   "+originalName+"  "+fname);
+			vo.setOriginal_name(originalName);
+			vo.setSaved_path(fname);
+			vo.setRequest_num(requestNum);
+			vo.setRequest_code(work);
 		try {
 			initR();
 			c.assign("keyword", keyword);
@@ -52,20 +101,92 @@ public class RService {
 			c.voidEval("wordcount<-table(unlist(nouns))");
 			c.voidEval("df_word<-as.data.frame(wordcount, stringsAsFactors = F)");
 			c.voidEval("df_word<-filter(df_word,nchar(Var1)>=2)");
-			c.voidEval("fname2<-paste0('C:/rpngtest/',fname,'.csv')");
+			c.voidEval("fname2<-paste0(fname,'.csv')");
 			c.voidEval("write.csv(x = df_word, file = fname2)");
-			c.voidEval("source('C:/rpngtest/savewordcloud.R', encoding = 'UTF-8')");
-			
+			c.voidEval("source('C:/rscript/savewordcloud.R', encoding = 'UTF-8')");
+			fdao.insertResultFile(vo);
+			ldao.updateDoneList(requestNum);
 		} catch (RserveException e) {
 			e.printStackTrace();
+			return "fail";
 		}catch(REXPMismatchException e){
-			
-		}catch (REngineException e) {
 			e.printStackTrace();
+			return "fail";
 		}finally{
         c.close();
 		}
-		return retStr;
+		}//end for
+		return "success";
+		}else{
+			return "empty1";
+		}
+	}
+	
+	public String schoolMap(String request_code, HttpServletRequest request) {
+		List<RequestListVO> list = ldao.selectWaitListfromCode(request_code, 20);
+		String dirPath = request.getServletContext().getRealPath("/resource/img/");
+		String work="";
+		int requestNum;
+		String keyword="";
+		String fname="";
+		String code="";
+		String originalName="";
+		String zoom1;
+		ResultFileVO vo=new ResultFileVO();
+		if(list !=null){
+		for(int j=0; j<list.size(); j++){
+			code=list.get(j).getRequest_code();
+			StringTokenizer stz = new StringTokenizer(code, "_");
+			work=stz.nextToken();
+			keyword=stz.nextToken();
+			originalName=stz.nextToken();
+			fname = dirPath+new Random().nextInt(1000000) + "";
+			requestNum=list.get(j).getRequest_num();
+			System.out.println(keyword+"   "+originalName+"  "+fname);
+			vo.setOriginal_name(originalName);
+			vo.setSaved_path(fname);
+			vo.setRequest_num(requestNum);
+			vo.setRequest_code(work);
+			if(!keyword.contains(" ")){
+				if((keyword.contains("서울")||keyword.contains("부산")||keyword.contains("인천"))){
+					zoom1="11";
+				}else if(keyword.contains("제주")){
+					zoom1="10";
+				}else if(keyword.contains("대전")){
+					zoom1="12";
+				}else{
+					zoom1="9";
+				}
+			}else{
+				zoom1="13";
+			}
+		try {
+			initSchoolR();
+			c.assign("site", keyword);
+			x = c.eval("site<-site");		
+			System.out.println(x.asString());
+			c.assign("fname", fname);
+			x= c.eval("fname<-fname");
+			c.assign("zoom1", zoom1);
+			x= c.eval("zoom1<-as.numeric(zoom1)");
+			System.out.println(x.asString());
+			c.voidEval("source('C:/rscript/schoolmap.R', encoding = 'UTF-8')");
+			fdao.insertResultFile(vo);
+			ldao.updateDoneList(requestNum);
+		} catch (RserveException e) {
+			e.printStackTrace();
+			return "fail";
+		}catch(REXPMismatchException e){
+			e.printStackTrace();
+			return "fail";
+		}finally{
+        c.close();
+		}
+		}//end for
+		return "success";
+		}else{
+			return "empty1";
+		}
 	}
 	
 	public void initR(){
@@ -86,6 +207,25 @@ public class RService {
 			c.voidEval("basic_url<-NULL");
 			c.voidEval("subjects<-NULL");
 			c.voidEval("urls<-NULL");
+		} catch (RserveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	public void initSchoolR(){
+		try {
+			c = new RConnection();
+			c.voidEval("library(dplyr)");
+			c.voidEval("library(plyr)");
+			c.voidEval("library(stringr)");
+			c.voidEval("library(ggmap)");
+			c.voidEval("library(ggplot2)");
+			c.voidEval("site<-NULL");
+			c.voidEval("fname<-NULL");
+			c.voidEval("fname1<-NULL");
+			c.voidEval("zoom1<-NULL");
+			c.voidEval("cent<-NULL");
 		} catch (RserveException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
