@@ -64,7 +64,7 @@
 	
 	
 	<select id="selectUpDown" resultMap="mainboardMap">
-		SELECT RECOMMEND, OPPOSTIE FROM MAIN_BOARD
+		SELECT RECOMMEND, OPPOSITE FROM MAIN_BOARD
 		WHERE MB_NUM=#{mb_num}
 	</select>
 	

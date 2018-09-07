@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import service.BoardService;
+import service.CommentService;
 import service.FileService;
 import vo.MainBoardVO;
 import vo.RequestBoardVO;
@@ -28,6 +31,9 @@ public class BoardController {
 	
 	@Autowired
 	private FileService fservice;
+	
+	@Autowired
+	private CommentService cservice;
 	
 	@RequestMapping("/requestBoardList.do")
 	public ModelAndView requestboardList(@RequestParam(value="p", defaultValue="1")int page) {
@@ -188,4 +194,50 @@ public class BoardController {
 		return mv;
 	}
 	
+	@RequestMapping("/comment.do")
+	@ResponseBody
+    public void insertComment(@RequestParam(value="con", defaultValue="0")int comment_num, HttpServletRequest request,HttpServletResponse response) throws Exception {//ajax는 void형 함수를 사용한다.
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter out = response.getWriter();
+        Map<String, Object> map = cservice.insertComment(comment_num, request);
+        
+        int result = (int) map.get("result");
+        out.println(result);        
+    }
+	
+	@RequestMapping(value="/commentList.do")
+	@ResponseBody
+    public void commentList(HttpServletRequest request, HttpServletResponse response) throws Exception {//ajax는 void형 함수를 사용한다.
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter out = response.getWriter();
+        Map<String,Object> map = cservice.serviceCmt(request);
+        String result = (String) map.get("AjaxMember");
+        System.out.println(result+"------------------------------");
+        out.println(result);        
+    }
+	
+	@RequestMapping("/processUpDown.do")
+	@ResponseBody
+	public void processUpDown(String code, int mb_num, HttpServletResponse response, HttpSession session){
+		
+		String mainJson;
+		String loginId = (String) session.getAttribute("loginId");
+		
+		MainBoardVO mainboard = service.processUpDown(code, mb_num, loginId);
+		
+		if(mainboard != null){
+	        mainJson = "{\"recommend\":\""+mainboard.getRecommend()
+	                    +"\",\"opposite\":\""+mainboard.getOpposite()+"\"}";
+	    }else{
+	        mainJson = "null";
+	    }
+
+	    try {
+	        response.getWriter().print(mainJson);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }   
+	}
 }

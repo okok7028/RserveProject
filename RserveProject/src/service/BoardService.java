@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import repository.MainBoardDAO;
@@ -11,6 +12,7 @@ import vo.MainBoardPageVO;
 import vo.MainBoardVO;
 import vo.RequestBoardPageVO;
 import vo.RequestBoardVO;
+import vo.UpdownflagVO;
 
 @Component
 public class BoardService {
@@ -141,4 +143,60 @@ public class BoardService {
 		mbdao.insertMainBoard(mb);
 		return mb.getMb_num();
 	}
+	
+	public MainBoardVO processUpDown(String code, int mb_num, String updown_id){
+		UpdownflagVO udf = null; 
+		udf =	mbdao.selectUpdownflag(mb_num, updown_id);
+		int up = 0;
+		int down = 0;
+		if(udf!=null){
+			up = udf.getFlag_up();
+			down = udf.getFlag_down();
+		}else{
+			udf = new UpdownflagVO();
+			udf.setUpdown_id(updown_id);
+			udf.setMb_num(mb_num);
+		}
+		if(code.equals("check")){
+			
+		}else if(code.equals("up")){
+			if(up==0 && down==0){
+				udf.setFlag_up(1);
+				udf.setFlag_down(0);
+				mbdao.insertUpdownflag(udf);
+				mbdao.upRecommend(mb_num);
+			}else if(up==1 && down==0){
+				return null;
+			}else if(up==0 && down==1){
+				udf.setFlag_up(1);
+				udf.setFlag_down(0);
+				mbdao.updateUpdownflag(udf);
+				mbdao.upRecommend(mb_num);
+				mbdao.reOpposite(mb_num);
+			}
+		}else if(code.equals("down")){
+			if(up==0 && down==0){
+				udf.setFlag_up(0);
+				udf.setFlag_down(1);
+				mbdao.insertUpdownflag(udf);
+				mbdao.downOpposite(mb_num);
+			}else if(up==1 && down==0){
+				udf.setFlag_up(0);
+				udf.setFlag_down(1);
+				mbdao.updateUpdownflag(udf);
+				mbdao.downOpposite(mb_num);
+				mbdao.reRecommend(mb_num);
+			}else if(up==0 && down==1){
+				return null;
+			}
+		}
+		return mbdao.selectUpDown(mb_num);
+	}
+	
+	//	@Scheduled(cron="0 * * * * *") // 테스트를위한 1분마다 초기화
+	@Scheduled(cron="0 0 0 * * *")//매일 24시 초기화
+		public void deleteUpdownFlag(){
+			mbdao.deleteUpdownflag();
+			System.out.println("추천반대 리셋");
+		}
 }
